@@ -575,8 +575,9 @@ for l in range(1):
     #print(Counter(np.ravel(index_partiton)==l))
     #print(Counter(np.ravel(index_partiton)))
     
-    best_sloutions=pd.read_csv(r'c:\users\Mitra\Desktop\New\bestsloution'+str(l+1)+'ndpart1.csv')
-    #best_sloutions = pd.read_csv('/home/mitra/Python/bestsloution' + str(l+1) + 'ndpart1.csv') #linux file
+    #best_sloutions=pd.read_csv(r'c:\users\Mitra\Desktop\New\bestsloution'+str(l+1)+'ndpart1.csv')
+    best_sloutions = pd.read_csv('/home/mitra/Python/bestsloution' + str(l+1) + 'ndpart1.csv') #linux file
+    
     
     rslt_list = None
     if True:
@@ -607,6 +608,28 @@ for l in range(1):
     #print(Counter(counts))
     print("score",l,score[-1])
     #print(Counter(counts))
+
+# --- Hardware Interface Export (New Addition for Reviewer) ---
+# این بخش را در انتهای کد، جایی که محاسبات تمام شده قرار دهید
+
+def export_for_spice(W_matrix, templates, filename="ONN_to_SPICE"):
+    # صادر کردن ماتریس وزن به فرمت CSV برای استفاده در نت‌لیست‌های SPICE
+    # هر عدد در این ماتریس می‌تواند مقدار یک مقاومت یا رسانایی در مدار باشد
+    df_w = pd.DataFrame(W_matrix)
+    df_w.to_csv(f"{filename}_weights.csv", index=False, header=False)
+    
+    # صادر کردن تمپلیت‌های بهینه شده توسط الگوریتم ژنتیک
+    df_t = pd.DataFrame(templates)
+    df_t.to_csv(f"{filename}_templates.csv", index=False, header=False)
+    
+    print(f"\n[SUCCESS] Hardware interface files generated: {filename}_weights.csv")
+
+# فراخوانی تابع با استفاده از متغیرهای موجود در کد شما:
+# فرض می‌کنیم rslt_list شامل نتایج نهایی است یا W_all آخرین ماتریس وزن است
+if 'W_all' in locals():
+    # لایه اول ماتریس وزن که بهینه شده است را صادر می‌کنیم
+    export_for_spice(W_all[:, :, 0], combined_patterns)
+    
 print("finall score",np.mean(score[-1]))
 import matplotlib.pyplot as plt
 import seaborn as sns
